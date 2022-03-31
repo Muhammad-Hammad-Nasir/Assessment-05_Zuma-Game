@@ -4,13 +4,10 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public GameManager gameManager;
+
     private Vector3 targetPos;
     private Vector3 lookPos;
-
-    void Start()
-    {
-        
-    }
 
     void Update()
     {
@@ -19,10 +16,13 @@ public class PlayerController : MonoBehaviour
 
     void LookDirection()
     {
-        Ray mouseRay = Camera.main.ScreenPointToRay(Input.mousePosition);
-        lookPos = mouseRay.origin + mouseRay.direction;
+        if (!gameManager.isGameover)
+        {
+            Ray mouseRay = Camera.main.ScreenPointToRay(Input.mousePosition);
+            lookPos = mouseRay.origin + mouseRay.direction;
 
-        targetPos = new Vector3(lookPos.x, transform.position.y, lookPos.z);
-        transform.LookAt(targetPos);
+            targetPos = new Vector3(lookPos.x, transform.position.y, lookPos.z);
+            transform.LookAt(targetPos);
+        }
     }
 }

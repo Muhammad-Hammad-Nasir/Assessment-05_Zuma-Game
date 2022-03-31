@@ -4,19 +4,23 @@ using UnityEngine;
 
 public class BallMovement : MonoBehaviour
 {
+    private GameManager gameManager;
     private GameObject player;
+
+    
+
     private Vector3 playerPos;
     private Vector3 offset;
     private Vector3 awayFromPlayer;
     private float xLimit = 25;
     private float zLimit = 20;
-    private float speed = 30;
+    private float speed = 15;
     private bool isShot = false;
-    private bool isCollided = false;
 
     void Start()
     {
         player = GameObject.Find("Player");
+        gameManager = GameObject.Find("GameManager").GetComponent<GameManager>();
     }
 
     void Update()
@@ -36,17 +40,11 @@ public class BallMovement : MonoBehaviour
         {
             transform.Translate(awayFromPlayer * Time.deltaTime * speed, Space.World);
         }
-
-        if (isCollided)
-        {
-            GetComponent<PathFollow>().enabled = true;
-            isCollided = false;
-        }
     }
 
     void Fire()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Space) && !isShot)
         {
             isShot = true;
             awayFromPlayer = transform.position - player.transform.position;
@@ -57,20 +55,31 @@ public class BallMovement : MonoBehaviour
     {
         if (transform.position.x > xLimit || transform.position.x < -xLimit)
         {
+            gameManager.isBullet = false;
             Destroy(gameObject);
         }
         else if (transform.position.z > zLimit || transform.position.z < -zLimit)
         {
+            gameManager.isBullet = false;
             Destroy(gameObject);
         }
     }
 
     void OnCollisionEnter(Collision collision)
     {
-        if (collision.gameObject.CompareTag("Red"))
+        if (tag == collision.gameObject.tag)
         {
-            Debug.Log("Collided");
-            isCollided = true;
+            gameManager.UpdateScore();
+            gameManager.playerAudio.PlayOneShot(gameManager.hitSound, 1);
+            gameManager.isBullet = false;
+            Destroy(collision.gameObject);
+            Destroy(gameObject);
+        }
+        else
+        {
+            gameManager.playerAudio.PlayOneShot(gameManager.hitSound, 1);
+            gameManager.isBullet = false;
+            Destroy(gameObject);
         }
     }
 }

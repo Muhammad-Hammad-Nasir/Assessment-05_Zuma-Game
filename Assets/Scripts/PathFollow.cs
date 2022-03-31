@@ -6,7 +6,7 @@ using PathCreation;
 public class PathFollow : MonoBehaviour
 {
     private PathCreator pathcreator;
-    private float speed = 2;
+    private float speed = 1.5f;
 
     private float distanceTravelled;
 

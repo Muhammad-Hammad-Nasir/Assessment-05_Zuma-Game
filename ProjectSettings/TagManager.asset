@@ -5,7 +5,12 @@ TagManager:
   serializedVersion: 2
   tags:
   - Guts
+  - Bullet
+  - PathFollower
   - Red
+  - Blue
+  - Green
+  - Yellow
   layers:
   - Default
   - TransparentFX
